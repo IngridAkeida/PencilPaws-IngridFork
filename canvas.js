@@ -32,6 +32,7 @@ export function initCanvas() {
         lastYPos = ((e.offsetY * canvasEl.height) / canvasEl.clientHeight) | 0;
         context.beginPath();
         context.moveTo(lastXPos, lastYPos);
+        drawingSound.play();
     });
     canvasEl.addEventListener("pointermove", function (e) {
         if (canDraw && isDrawing) {
@@ -54,9 +55,58 @@ export function initCanvas() {
             context.lineTo(lastXPos, lastYPos);
             context.stroke();
             context.closePath();
+            drawingSound.pause();
+            drawingSound.currentTime = 0;
             isDrawing = false;
         }
     });
 
     fixCanvasScaling();
+}
+
+export function initTouchHandlers() {
+    // Handles the start of a touch event on the canvas
+    function handleTouchStart(e) {
+      e.preventDefault(); // Prevents default touch behavior, like scrolling
+      isDrawing = true; // Sets the drawing flag to true
+      const touchPos = getTouchPos(e); // Gets the touch position
+      startDrawing(touchPos); // Starts the drawing process at the touch position
+      drawingSound.play();
+    }
+  
+    // Handles the movement of a touch on the canvas
+    function handleTouchMove(e) {
+      e.preventDefault(); // Prevents default touch behavior
+      if (canDraw && isDrawing) {
+        const touchPos = getTouchPos(e); // Gets the new touch position
+        continueDrawing(touchPos); // Continues the drawing process at the new position
+      }
+    }
+  
+    // Handles the end of a touch event on the canvas
+    function handleTouchEnd(e) {
+      e.preventDefault(); // Prevents default touch behavior
+      if (isDrawing) {
+        stopDrawing(); // Stops the drawing process
+        drawingSound.pause();
+        drawingSound.currentTime = 0;
+        isDrawing = false; // Resets the drawing flag
+      }
+    }
+  
+    // Calculates the touch position relative to the canvas
+    function getTouchPos(touchEvent) {
+      const rect = canvasEl.getBoundingClientRect(); // Gets the canvas bounding rectangle
+      const touch = touchEvent.touches[0]; // Gets the first touch point
+      return {
+        x: touch.clientX - rect.left, // Calculates the X coordinate relative to the canvas
+        y: touch.clientY - rect.top, // Calculates the Y coordinate relative to the canvas
+      };
+    }
+  
+    // Initializes touch event handlers for canvas drawing
+  
+    canvasEl.addEventListener("touchstart", handleTouchStart, false);
+    canvasEl.addEventListener("touchmove", handleTouchMove, false);
+    canvasEl.addEventListener("touchend", handleTouchEnd, false);
 }

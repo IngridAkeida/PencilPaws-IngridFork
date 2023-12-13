@@ -7,6 +7,7 @@ const inputForm = document.querySelector(".input__content-wrapper"); // The form
 // const formGridRow = document.querySelector(".card__grid-wrapper");
 const userInput = document.querySelector(".input"); // To store the user guess/input into a variable
 const cardInformationCanvas = document.querySelector("#card-infromation-canvas");
+const clickSound = document.getElementById("clickSound");
 
 // Buttons
 const nextPageButtons = document.querySelectorAll(".btn__next-page"); // All buttons that take you to the next card/page
@@ -22,7 +23,7 @@ const conditionMessageEl = document.querySelector(".condition__message");
 //const lettersInAlphabet = /^[a-z]+$/;
 
 let randomAnimal; // Varible to store the API's random animal
-let secondsLeftToDraw = 2; // How many seconds the player should have to draw on the canvas
+let secondsLeftToDraw = 15; // How many seconds the player should have to draw on the canvas
 let currentPageNumber = 0; // What card/page the user is currently on
 let nextPageNumber = currentPageNumber + 1; // The page number to be displayed next
 
@@ -89,6 +90,7 @@ function updateContentBasedOnPageNumber() {
 
 // This function displays the next card/page and increments the current page number
 function changePage() {
+    clickSound.play();
     cards[currentPageNumber].classList.remove("card--visible");
     cards[nextPageNumber].classList.add("card--visible");
     currentPageNumber++;
@@ -197,11 +199,13 @@ function compareGuessToAnswer() {
 
 // Play again button that reloads the page
 playAgainBtn.addEventListener("click", function () {
+    clickSound.play();
     location.reload();
 });
 
 // Submit button for user to submit their guess
 submitGuessBtn.addEventListener("click", function () {
+    clickSound.play();
     inputForm.classList.remove("card--visible");
     conditionsWrapperEl.classList.add("condition--visible");
     compareGuessToAnswer();
