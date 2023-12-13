@@ -157,8 +157,8 @@ function showLosingCondition() {
 function compareGuessToAnswer() {
 
     let cardInfo = document.querySelector(".card--error");
-    let empty = userInput.value === '';
-    let numberEl = !isNaN(userInput.value);
+    let emptyField = userInput.value === '';
+    let numberField = !isNaN(userInput.value);
 
     function styleAnswerGuesses(){
         inputForm.classList.add("card--visible");
@@ -167,20 +167,20 @@ function compareGuessToAnswer() {
         cardInfo.style.display = 'block';
     }
 
-    if(empty) {
+    if(emptyField) {
         styleAnswerGuesses()
         cardInfo.innerHTML = "Please fill in the field";
         return;
     }
 
-    if (numberEl) {
+    if (numberField) {
         styleAnswerGuesses()
         conditionsWrapperEl.classList.add("condition--visible"); 
         cardInfo.textContent = "Input needs to be text";
         return;
     }
     
-    if (!empty && !numberEl){
+    if (!emptyField && !numberField){
         inputForm.classList.remove("input__content-wrapper--visible");
         conditionsWrapperEl.classList.add("condition--visible");
         playAgainBtn.style.display = 'block';
