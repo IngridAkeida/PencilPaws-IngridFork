@@ -6,7 +6,6 @@ let lastYPos = 0;
 // Canvas
 const canvasEl = document.querySelector("#canvas"); // Canvas element
 const context = canvasEl.getContext("2d"); // The content within the canvas
-const rect = canvasEl.getBoundingClientRect(); // Size of the Canvas
 
 export function disableDrawing() {
     canDraw = false;
@@ -87,7 +86,6 @@ export function initTouchHandlers() {
     function handleTouchEnd(e) {
       e.preventDefault(); // Prevents default touch behavior
       if (isDrawing) {
-        stopDrawing(); // Stops the drawing process
         drawingSound.pause();
         drawingSound.currentTime = 0;
         isDrawing = false; // Resets the drawing flag
