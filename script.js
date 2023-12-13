@@ -22,7 +22,7 @@ const conditionMessageEl = document.querySelector(".condition__message");
 const lettersInAlphabet = /^[a-z]+$/;
 
 let randomAnimal; // Varible to store the API's random animal
-let secondsLeftToDraw = 30; // How many seconds the player should have to draw on the canvas
+let secondsLeftToDraw = 2; // How many seconds the player should have to draw on the canvas
 let currentPageNumber = 0; // What card/page the user is currently on
 let nextPageNumber = currentPageNumber + 1; // The page number to be displayed next
 
@@ -41,6 +41,13 @@ async function loadAnimal() {
     loader.classList.remove("loader--visible");
 }
 
+function showForm() {
+    inputForm.classList.add("form--visible"); // Show form where user can input guess
+}
+function positionCardElements() {
+    cards[currentPageNumber].classList.add("card--content-positioning"); // Push canvas to the side to make place for form (grid on class in css)
+}
+
 function handleTimeUp() {
     canvas.disableDrawing();
     saveCanvasToLocalStorage();
@@ -52,6 +59,8 @@ function handleTimeUp() {
 function checkTimeLeftToDraw() {
     if (secondsLeftToDraw === 0) {
         handleTimeUp();
+        showForm();
+        positionCardElements();
     } else {
         setTimeout(countDownSeconds, 1000); // Keep counting down by calling the function again after 1 second
     }
@@ -143,8 +152,11 @@ function showLosingCondition() {
     conditionMessageEl.innerText = `The correct answer is ${randomAnimal}!`;
     displayGalleryImages();
 }
+
+
 // This function checkes if the user have guessed the correct animal and calls for function to display winning or loosing condition
 function compareGuessToAnswer() {
+    
     if (userInput.value.toLowerCase() === randomAnimal.toLowerCase()) {
         showWinningCondition();
     } else {
