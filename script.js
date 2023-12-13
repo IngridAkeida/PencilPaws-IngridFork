@@ -3,12 +3,10 @@ import * as canvas from "./canvas.js";
 
 // Cards / Forms / Inputs
 const cards = document.querySelectorAll(".card"); // All cards/pages saved in an array
-const inputContentWrapper = document.querySelector(".input__content-wrapper"); // The form that displays where the user can input guess
+const inputForm = document.querySelector(".input__content-wrapper"); // The form that displays where the user can input guess
 // const formGridRow = document.querySelector(".card__grid-wrapper");
 const userInput = document.querySelector(".input"); // To store the user guess/input into a variable
-const cardInformationCanvas = document.querySelector(
-    "#card-infromation-canvas"
-);
+const cardInformationCanvas = document.querySelector("#card-infromation-canvas");
 
 // Buttons
 const nextPageButtons = document.querySelectorAll(".btn__next-page"); // All buttons that take you to the next card/page
@@ -47,7 +45,7 @@ function handleTimeUp() {
     canvas.disableDrawing();
     saveCanvasToLocalStorage();
     cardInformationCanvas.textContent = "Nice drawing!!";
-    inputContentWrapper.classList.add("input__content-wrapper--visible"); // Show form where user can input guess
+    inputForm.classList.add("input__content-wrapper--visible"); // Show form where user can input guess
     cards[currentPageNumber].classList.add("card--content-positioning"); // Push canvas to the side to make place for form (grid on class in css)
 }
 // This function checks if the user have any time left to draw and eccecutes accordingly
@@ -163,7 +161,7 @@ playAgainBtn.addEventListener("click", function () {
 submitGuessBtn.addEventListener("click", function () {
     let userGuess = userInput.value.toLowerCase();
     if (lettersInAlphabet.test(userGuess)) {
-        inputContentWrapper.classList.remove("input__content-wrapper--visible");
+        inputForm.classList.remove("input__content-wrapper--visible");
         conditionsWrapperEl.classList.add("condition--visible");
         compareGuessToAnswer();
     } else {
