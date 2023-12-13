@@ -19,7 +19,7 @@ const conditionStatusEl = document.querySelector(".condition__status");
 const conditionMessageEl = document.querySelector(".condition__message");
 
 // lettter in the Alphabet
-const lettersInAlphabet = /^[a-z]+$/;
+//const lettersInAlphabet = /^[a-z]+$/;
 
 let randomAnimal; // Varible to store the API's random animal
 let secondsLeftToDraw = 2; // How many seconds the player should have to draw on the canvas
@@ -42,7 +42,7 @@ async function loadAnimal() {
 }
 
 function showForm() {
-    inputForm.classList.add("form--visible"); // Show form where user can input guess
+    inputForm.classList.add("card--visible"); // Show form where user can input guess
 }
 function positionCardElements() {
     cards[currentPageNumber].classList.add("card--content-positioning"); // Push canvas to the side to make place for form (grid on class in css)
@@ -153,14 +153,45 @@ function showLosingCondition() {
     displayGalleryImages();
 }
 
-
 // This function checkes if the user have guessed the correct animal and calls for function to display winning or loosing condition
 function compareGuessToAnswer() {
+
+    let cardInfo = document.querySelector(".card--error");
+    let empty = userInput.value === '';
+    let numberEl = !isNaN(userInput.value);
+
+    function styleAnswerGuesses(){
+        inputForm.classList.add("card--visible");
+        //state style changes
+        playAgainBtn.style.display = 'none';
+        cardInfo.style.display = 'block';
+    }
+
+    if(empty) {
+        styleAnswerGuesses()
+        cardInfo.innerHTML = "Please fill in the field";
+        return;
+    }
+
+    if (numberEl) {
+        styleAnswerGuesses()
+        conditionsWrapperEl.classList.add("condition--visible"); 
+        cardInfo.textContent = "Input needs to be text";
+        return;
+    }
     
-    if (userInput.value.toLowerCase() === randomAnimal.toLowerCase()) {
-        showWinningCondition();
-    } else {
-        showLosingCondition();
+    if (!empty && !numberEl){
+        inputForm.classList.remove("input__content-wrapper--visible");
+        conditionsWrapperEl.classList.add("condition--visible");
+        playAgainBtn.style.display = 'block';
+        if (userInput.value.toLowerCase() === randomAnimal.toLowerCase()) {
+            showWinningCondition();
+            inputForm.reset();
+        }
+        else {
+            showLosingCondition();
+            inputForm.reset();
+        }   
     }
 }
 
@@ -171,14 +202,10 @@ playAgainBtn.addEventListener("click", function () {
 
 // Submit button for user to submit their guess
 submitGuessBtn.addEventListener("click", function () {
-    let userGuess = userInput.value.toLowerCase();
-    if (lettersInAlphabet.test(userGuess)) {
-        inputForm.classList.remove("input__content-wrapper--visible");
-        conditionsWrapperEl.classList.add("condition--visible");
-        compareGuessToAnswer();
-    } else {
-        userInput.value = "";
-    }
+    inputForm.classList.remove("card--visible");
+    conditionsWrapperEl.classList.add("condition--visible");
+    compareGuessToAnswer();
+    inputForm.reset();
 });
 
 for (let nextPageButton of nextPageButtons) {
