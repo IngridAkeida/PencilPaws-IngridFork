@@ -4,10 +4,12 @@ import * as canvas from "./canvas.js";
 // Cards / Forms / Inputs
 const cards = document.querySelectorAll(".card"); // All cards/pages saved in an array
 const inputForm = document.querySelector(".input__content-wrapper"); // The form that displays where the user can input guess
-// const formGridRow = document.querySelector(".card__grid-wrapper");
 const userInput = document.querySelector(".input"); // To store the user guess/input into a variable
 const cardInformationCanvas = document.querySelector("#card-infromation-canvas");
+
+//sound track
 const clickSound = document.getElementById("clickSound");
+const winningSound = document.getElementById("winningSound");
 
 // Buttons
 const nextPageButtons = document.querySelectorAll(".btn__next-page"); // All buttons that take you to the next card/page
@@ -18,9 +20,6 @@ const playAgainBtn = document.querySelector(".btn__play-again");
 const conditionsWrapperEl = document.querySelector(".condition__wrapper");
 const conditionStatusEl = document.querySelector(".condition__status");
 const conditionMessageEl = document.querySelector(".condition__message");
-
-// lettter in the Alphabet
-//const lettersInAlphabet = /^[a-z]+$/;
 
 let randomAnimal; // Varible to store the API's random animal
 let secondsLeftToDraw = 15; // How many seconds the player should have to draw on the canvas
@@ -103,12 +102,19 @@ function saveCanvasToLocalStorage() {
     let objectInfo = {
         url: "",
         animal: "",
+        //guess: "",
     };
     let currentCanvasUrl = canvas.getImageUrl();
+    //let currentCanvasGuess = userInput.value;
+    //console.log(userInput);
+    //console.log(userInput.value);
 
     objectInfo.url = currentCanvasUrl;
     objectInfo.animal = randomAnimal;
+    //objectInfo.guess = currentCanvasGuess;
+
     galleryItemList.push(objectInfo);
+    //console.log(objectInfo);
 
     // galleryItemList.push(currentCanvasUrl);
 
@@ -124,14 +130,18 @@ function displayGalleryImages() {
     for (let galleryItem of galleryItemList) {
         let galleryImg = document.createElement("img");
         let galleryText = document.createElement("p");
+        //let galleryGuess = document.createElement("p");
         let galleryContentWrapper = document.createElement("div");
         galleryContentWrapper.classList.add("gallery-content-wrapper");
 
         galleryImg.src = galleryItem.url;
         galleryText.textContent = galleryItem.animal;
+        //galleryGuess.textContent = galleryItem.guess;
+        console.log(galleryItem)
         galleryWrapper.appendChild(galleryContentWrapper);
 
         galleryContentWrapper.appendChild(galleryImg);
+        //galleryContentWrapper.appendChild(galleryGuess);
         galleryContentWrapper.appendChild(galleryText);
     }
 }
@@ -188,6 +198,7 @@ function compareGuessToAnswer() {
         playAgainBtn.style.display = 'block';
         if (userInput.value.toLowerCase() === randomAnimal.toLowerCase()) {
             showWinningCondition();
+            winningSound.play();
             inputForm.reset();
         }
         else {
